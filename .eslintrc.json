@@ -28,10 +28,6 @@
             "error",
             "unix"
         ],
-        "quotes": [
-            "error",
-            "single"
-        ],
         "semi": [
             "error",
             "never"
@@ -117,7 +113,15 @@
         "no-unexpected-multiline": 2,
         "no-unneeded-ternary": [2, { "defaultAssignment": false }],
         "no-unreachable": 2,
-        "no-unused-vars": [1, { "vars": "all", "args": "none" }],
+        "no-unused-vars": [
+            1,
+            { 
+                "vars": "all", 
+                "args": "none", 
+                "varsIgnorePattern": "^res$" 
+                
+            }
+            ],
         "no-useless-call": 2,
         "no-var": 2,
         "no-with": 2,
