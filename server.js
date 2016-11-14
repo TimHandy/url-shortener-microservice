@@ -1,6 +1,6 @@
 'use strict'
 
-let routes = require('./routes')
+let routes = require('./app/urlShortener/urlShortenerRoutes')
 const path = require('path')
 const express = require('express')
 const app = express()
