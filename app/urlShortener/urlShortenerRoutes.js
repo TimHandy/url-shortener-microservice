@@ -110,7 +110,7 @@ module.exports = function(app){
                 console.log('this data:', data + url)
                 let response = {
                     original_url: url,
-                    short_url: req.protocol + '://' + req.hostname + '/' + data
+                    short_url: req.protocol + '://' + req.hostname + '/api/' + data
                 }
                 res.json(response);
             });
@@ -118,7 +118,7 @@ module.exports = function(app){
         // console.log('return id: ', uniqueId)
     })
     
-    app.get('/:id', function(req, res) {
+    app.get('/api/:id', function(req, res) {
         
         let id = req.params.id
         // look up the id from the database
