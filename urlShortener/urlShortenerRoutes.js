@@ -8,7 +8,7 @@
  * We recommend a 30 second connection timeout because it allows for 
  * plenty of time in most operating environments.
  =============================================================================*/
-require('dotenv').config()
+require('dotenv').config({ silent: process.env.NODE_ENV === 'production' })
 const path = require('path')
 const options = {
     server: {
