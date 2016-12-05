@@ -16,5 +16,5 @@ routes(app)
 
 // listen for requests
 let listener = app.listen(port, process.env.IP, function() {
-    console.log('Your app is listening at ' + ip + ' ' + listener.address().port)
+    console.log('Your app is listening at ' + listener.address().port)
 })
