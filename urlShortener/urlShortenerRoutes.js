@@ -88,7 +88,7 @@ module.exports = function(app) {
     console.log('Successfully connected to MongoDB.')
 
     app.get('/', function(req, res) {
-        res.sendFile(path.join(__dirname, '/index.html'))
+        res.sendFile(path.join(__dirname, 'index.html'))
     })
     
     app.get('/new/*', function(req, res) {
