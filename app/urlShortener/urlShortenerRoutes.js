@@ -10,14 +10,14 @@
  =============================================================================*/
 require('dotenv').config()
 const options = {
-  server: {
-    socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 }
-  }, 
-  replset: {
-    socketOptions: { keepAlive: 300000, connectTimeoutMS : 30000 }
-  }
+    server: {
+        socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 }
+    }, 
+    replset: {
+        socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 }
+    }
 
-};
+}
 
 const mongoose = require('mongoose')
 mongoose.Promise = global.Promise
@@ -25,7 +25,7 @@ mongoose.Promise = global.Promise
 // const mongoConnectStr = 'mongodb://process.env.mongoUser:process.env.mongoPassword@ds147777.mlab.com:47777/urlshortenerdb'
 //const mongoConnectStr = 'mongodb://user1:FCCstudy@ds147777.mlab.com:47777/urlshortenerdb'
 mongoose.connect('mongodb://' + process.env.mongoUser + ':' + process.env.mongoPassword + '@ds147777.mlab.com:47777/urlshortenerdb', options) 
-console.log(process.env.mongoUser);
+console.log(process.env.mongoUser)
 const validator = require('validator')
 const UrlModel = require('./urlShortenerModel')
 
@@ -33,54 +33,46 @@ const UrlModel = require('./urlShortenerModel')
 // MODEL #####################################################
                     // this could end up in a module file
 
-module.exports = function(app){
+module.exports = function(app) {
 
     function findNextId(url, callback) {
     // check for largest urlId in db and set local var if found
     
-    UrlModel.count({}, function(err, count) {
-        let uniqueIdCount
-        console.log('count: ', count)
-        if (count === 0) {
-            uniqueIdCount = 0
-            createAndInsertUrl(uniqueIdCount + 1, url)
-        } else {
-            // set uniqueIdCount to the largest id in the collection
-            UrlModel.find({}).sort({urlId : -1}).limit(1).exec(function(err, data) {
-                // console.log(data)
-                uniqueIdCount = data[0].urlId
-                console.log(uniqueIdCount)
+        UrlModel.count({}, function(err, count) {
+            let uniqueIdCount
+            console.log('count: ', count)
+            if (count === 0) {
+                uniqueIdCount = 0
                 createAndInsertUrl(uniqueIdCount + 1, url)
+            } else {
+            // set uniqueIdCount to the largest id in the collection
+                UrlModel.find({}).sort({urlId: -1}).limit(1).exec(function(err, data) {
+                // console.log(data)
+                    uniqueIdCount = data[0].urlId
+                    console.log(uniqueIdCount)
+                    createAndInsertUrl(uniqueIdCount + 1, url)
                 
-                if (callback) {
-                    callback(uniqueIdCount + 1)
-                }
-            }) 
-        }
-    })
-    
-    
+                    if (callback) {
+                        callback(uniqueIdCount + 1)
+                    }
+                }) 
+            }
+        })
     }
     
     function createAndInsertUrl(uniqueIdCount, url) {
     //insert object in db
-    let newUrl = new UrlModel({
-        url: url,
-        urlId: uniqueIdCount
-    })
+        let newUrl = new UrlModel({
+            url: url,
+            urlId: uniqueIdCount
+        })
     
-    newUrl.save(function(err, data) {
-        if (err) throw err
-        console.log('object added')
-    })
+        newUrl.save(function(err, data) {
+            if (err) throw err
+            console.log('object added')
+        })
     
     }
-    
-    
-    
-    // VIEW #######################################################
-                    // this could end up in a module file
-    
     
     function renderShortUrl(url) {
     // do stuff to render using a template might be nice!
@@ -95,13 +87,10 @@ module.exports = function(app){
         let url = req.url.replace(/^\/new\//, '')
         if (!validator.isURL(url, {require_tld: true, require_protocol: true, require_host: true, require_valid_protocol: true})) {
             let response = {
-                "error": "Wrong url format, make sure you have a valid protocol and real site."
+                'error': 'Wrong url format, make sure you have a valid protocol and real site.'
             }
             res.json(response)
-        } 
-        else {
-        
-            
+        } else {    
             //let shortUrl = dbInsert(url)
             // renderShortUrl(shortUrl)
             // console.log(url);
@@ -110,50 +99,41 @@ module.exports = function(app){
                 console.log('this data:', data + url)
                 let response = {
                     original_url: url,
-                    short_url: req.protocol + '://' + req.hostname + '/api/' + data
+                    short_url: req.protocol + '://' + req.hostname + '/' + data
                 }
-                res.json(response);
-            });
+                res.json(response)
+            })
         }
         // console.log('return id: ', uniqueId)
     })
     
-    app.get('/api/:id', function(req, res) {
+    app.get('/:id', function(req, res) {
         
         let id = req.params.id
-        // look up the id from the database
-        UrlModel.find({urlId: id}, function(err, doc) {
-            console.log(doc)
-            if (err) {
-                throw err;
-            }
-            
-            if (doc.length !== 0 ) {
-                let url = doc[0].url
-                res.redirect(url)
-            } else {
-                let response = {
-                "error": "Not in the database."
-            }
-            res.json(response)
-            }
-            
-        })
-        
-        // grab the url from the database
-        // forward the request to the url
-        
-        
+        if (/^\d+$/.test(id)) {
+            // look up the id from the database
+            UrlModel.find({urlId: id}, function(err, doc) {
+                console.log(doc)
+                if (err) {
+                    throw err
+                }
+                
+                if (doc.length !== 0 ) {
+                    let url = doc[0].url
+                    res.redirect(url)
+                } else {
+                    let response = {
+                        'error': 'Not in the database.'
+                    }
+                    res.json(response)
+                }
+                
+            })
+        }         
     })
     
     // fallthrough route
     app.use(function(req, res) {
         res.sendStatus(404)
-    })
-    
-    // // listen for requests
-    // let listener = app.listen(port, process.env.IP, function() {
-    //     console.log('Your app is listening on port ' + listener.address().port)
-    // })
-    
+    })    
 }
