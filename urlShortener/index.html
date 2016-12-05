@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link href="styles.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <h1>URL Shortener Microservice</h1>
+    <h2>FreeCodeCamp assignment</h2>
+
+    <p>Note to self: if testing on localhost, the redirect won't work as it drops the port number. If you add the port number it does work.</p>
+
+    <p>Objective: Build a full stack JavaScript app that is functionally similar to this: </p>
+    
+    <p>https://little-url.herokuapp.com/ and deploy it to Heroku.</p>
+    
+    <p>Here are the specific user stories you should implement for this project:</p>
+    
+    <p>User Story: I can pass a URL as a parameter and I will receive a shortened URL in the JSON response.</p>
+    
+    <p>User Story: If I pass an invalid URL that doesn't follow the valid http://www.example.com format, the JSON response will contain an error instead.</p>
+    
+    <p>User Story: When I visit that shortened URL, it will redirect me to my original link.</p>
+    
+    <p>Pro Tip: Checkout this wiki article for tips on integrating MongoDB on Heroku.</p>
+
+
+<h2>  
+    Usage:
+</h2>
+
+<p>Start the server; uses package.json scripts to point to to 'nodemon server.js'</p>
+
+<p>$ npm start</p>
+
+
+
+<h3>Example shortened URL creation usage</h3>
+
+<ul>
+    <li>https://little-url.herokuapp.com/new/https://www.google.com</li>
+    <li>https://little-url.herokuapp.com/new/http://foo.com:80</li>
+</ul>
+
+Example creation output:
+
+<p>
+    { "original_url":"http://foo.com:80", "short_url":"https://little-url.herokuapp.com/8170" }
+    
+</p>
+
+<h3>Example retrieving a url from a shortened code:</h3>
+
+<p>https://little-url.herokuapp.com/2871</p>
+
+Will redirect to:
+
+<ul><li>https://www.google.com/</li></ul>
+</body>
+</html>
+

@@ -9,6 +9,7 @@
  * plenty of time in most operating environments.
  =============================================================================*/
 require('dotenv').config()
+const path = require('path')
 const options = {
     server: {
         socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 }
@@ -41,20 +42,23 @@ module.exports = function(app) {
         UrlModel.count({}, function(err, count) {
             let uniqueIdCount
             console.log('count: ', count)
-            if (count === 0) {
+            if (count === 0 && !err) {
                 uniqueIdCount = 0
                 createAndInsertUrl(uniqueIdCount + 1, url)
             } else {
             // set uniqueIdCount to the largest id in the collection
                 UrlModel.find({}).sort({urlId: -1}).limit(1).exec(function(err, data) {
-                // console.log(data)
-                    uniqueIdCount = data[0].urlId
-                    console.log(uniqueIdCount)
-                    createAndInsertUrl(uniqueIdCount + 1, url)
+                    if (!err) {     // TODO: handle this error better!
+                        // console.log(data)
+                        uniqueIdCount = data[0].urlId
+                        console.log(uniqueIdCount)
+                        createAndInsertUrl(uniqueIdCount + 1, url)
                 
-                    if (callback) {
-                        callback(uniqueIdCount + 1)
+                        if (callback) {
+                            callback(uniqueIdCount + 1)
+                        }
                     }
+                    
                 }) 
             }
         })
@@ -75,12 +79,17 @@ module.exports = function(app) {
     }
     
     function renderShortUrl(url) {
-    // do stuff to render using a template might be nice!
+    // TODO: do stuff to render using a template might be nice!
     }
     
-   // app.use(app.static(path.join(__dirname, 'public')))
+    // this static route is in server.js 
+    // app.use(app.static(path.join(__dirname, 'public')))
     
     console.log('Successfully connected to MongoDB.')
+
+    app.get('/', function(req, res) {
+        res.sendFile(path.join(__dirname, '/index.html'))
+    })
     
     app.get('/new/*', function(req, res) {
         // store url in var

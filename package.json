@@ -19,6 +19,7 @@
   "homepage": "https://github.com/TimHandy/url-shortener-microservice#readme",
   "dependencies": {
     "dotenv": "^2.0.0",
+    "ejs": "^2.5.3",
     "express": "^4.14.0",
     "mongodb": "^2.2.11",
     "mongoose": "^4.6.6",
