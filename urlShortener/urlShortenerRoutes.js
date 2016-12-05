@@ -8,6 +8,8 @@
  * We recommend a 30 second connection timeout because it allows for 
  * plenty of time in most operating environments.
  =============================================================================*/
+
+// silence errors on production (Heroku) from dotenv complaining about lack of .env file. On Heroku the environment vars are added manually on the Settings page
 require('dotenv').config({ silent: process.env.NODE_ENV === 'production' })
 const path = require('path')
 const options = {
@@ -26,7 +28,6 @@ mongoose.Promise = global.Promise
 // const mongoConnectStr = 'mongodb://process.env.mongoUser:process.env.mongoPassword@ds147777.mlab.com:47777/urlshortenerdb'
 //const mongoConnectStr = 'mongodb://user1:FCCstudy@ds147777.mlab.com:47777/urlshortenerdb'
 mongoose.connect('mongodb://' + process.env.mongoUser + ':' + process.env.mongoPassword + '@ds147777.mlab.com:47777/urlshortenerdb', options) 
-console.log(process.env.mongoUser)
 const validator = require('validator')
 const UrlModel = require('./urlShortenerModel')
 
@@ -84,8 +85,6 @@ module.exports = function(app) {
     
     // this static route is in server.js 
     // app.use(app.static(path.join(__dirname, 'public')))
-    
-    console.log('Successfully connected to MongoDB.')
 
     app.get('/', function(req, res) {
         res.sendFile(path.join(__dirname, 'index.html'))
