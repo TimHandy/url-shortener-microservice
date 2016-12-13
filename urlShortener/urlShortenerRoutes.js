@@ -1,5 +1,7 @@
 'use strict'
 
+require('dotenv').config({ silent: process.env.NODE_ENV === 'production' })
+const path = require('path')
 
 /* MONGOOSE AND MONGOLAB
  * ----------------------------------------------------------------------------
@@ -10,8 +12,6 @@
  =============================================================================*/
 
 // silence errors on production (Heroku) from dotenv complaining about lack of .env file. On Heroku the environment vars are added manually on the Settings page
-require('dotenv').config({ silent: process.env.NODE_ENV === 'production' })
-const path = require('path')
 const options = {
     server: {
         socketOptions: { keepAlive: 300000, connectTimeoutMS: 30000 }
