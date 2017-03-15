@@ -30,7 +30,9 @@ $ npm start
 ### Example creation usage:
 
 use /new/<url> :
+
 https://fcc-minurl.herokuapp.com/new/https://www.google.com
+
 https://fcc-minurl.herokuapp.com/new/http://foo.com:80
 
 Example creation output
